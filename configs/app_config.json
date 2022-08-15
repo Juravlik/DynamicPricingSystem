@@ -1,9 +1,8 @@
 {
-  "canc_path": "./data/canc_df.csv",
-  "feedback_path": "./data/feedback.csv",
-  "promo_path": "./data/promo_df.csv",
-  "sales_plan_path": "./data/sales_plan.csv",
-  "sample_1000_path": "./data/sample_1000.csv",
-  "transactions_path": "./data/transactions.csv",
-  "wholesale_trade_table_path": "./data/wholesale_trade_table.csv"
+  "canc_path": "/home/juravlik/PycharmProjects/DynamicPricingSystem/data/raw/canc_df.csv",
+  "promo_path": "/home/juravlik/PycharmProjects/DynamicPricingSystem/data/raw/promo_df.csv",
+  "sales_plan_path": "/home/juravlik/PycharmProjects/DynamicPricingSystem/data/raw/sales_plan.csv",
+  "sample_1000_path": "/home/juravlik/PycharmProjects/DynamicPricingSystem/data/prepared/sample_1000.csv",
+  "transactions_path": "/home/juravlik/PycharmProjects/DynamicPricingSystem/data/raw/transactions.csv",
+  "wholesale_trade_table_path": "/home/juravlik/PycharmProjects/DynamicPricingSystem/data/raw/wholesale_trade_table.csv"
 }

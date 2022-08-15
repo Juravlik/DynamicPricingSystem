@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import uuid
 from typing import List, Optional, Callable
-import time
+from utils.utils import wait
 
 
 class AppHandler:
@@ -13,8 +13,7 @@ class AppHandler:
                  url_begin: str,
                  url_task_data_get: str,
                  url_task_result_post: str,
-                 url_task_result_get: str
-                 ):
+                 url_task_result_get: str):
 
         self.uuid = uuid
         self.url_begin = url_begin
@@ -25,13 +24,16 @@ class AppHandler:
     def start(self):
         req = requests.post(self.url_begin.format(uuid=self.uuid))
 
+        wait()
+
         print('Start working:')
         print(req.json())
 
     def get_batch(self) -> Optional[pd.DataFrame]:
         response = requests.get(self.url_task_data_get.format(uuid=self.uuid))
+        wait()
 
-        if response.json()['status'] == 'batch processing finished ':
+        if 'status' in response.json() and response.json()['status'] == 'batch processing finished ':
             print('Batches are over')
             return None
 
@@ -41,13 +43,13 @@ class AppHandler:
         requests.post(self.url_task_result_post.format(uuid=self.uuid),
                       data=batch_df.to_json(orient='records'))
 
+        wait()
+
     def get_batch_results(self) -> pd.DataFrame:
         response = requests.get(self.url_task_result_get.format(uuid=self.uuid))
+        wait()
 
         return pd.read_json(response.json())
-
-
-
 
 
 if __name__ == "__main__":
@@ -55,7 +57,21 @@ if __name__ == "__main__":
     UUID = uuid.uuid4().hex
     print(UUID)
 
-    URL_BEGIN_DATA = 'https://lab.karpov.courses/hardml-api/project-1/task/{uuid}/begin'
-    req = requests.post(URL_BEGIN_DATA.format(uuid=UUID))
+    app_handler = AppHandler(uuid=UUID,
+                             url_begin='https://lab.karpov.courses/hardml-api/project-1/task/{}/begin'.format(UUID),
+                             url_task_data_get='https://lab.karpov.courses/hardml-api/project-1/task/{}/data'\
+                             .format(UUID),
+                             url_task_result_get='https://lab.karpov.courses/hardml-api/project-1/task/{}/result'\
+                             .format(UUID),
+                             url_task_result_post='https://lab.karpov.courses/hardml-api/project-1/task/{}/result/'\
+                             .format(UUID))
 
-    print(req.json())
+    app_handler.start()
+
+    df_batch = app_handler.get_batch().head()
+
+    print(df_batch.head())
+    print(df_batch.tail())
+
+
+
